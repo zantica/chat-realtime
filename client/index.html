@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zantica chat</title>
+    <link rel="stylesheet" type="text/css" href="style.css" media=”screen” />
+    <script type="module">
+      import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
+      const socket = io();
+      const form = document.getElementById("form");
+      const input = document.getElementById("input");
+      const messages = document.getElementById("messages");
+
+      socket.on("chat message", (msg) => {
+        console.log(messages, "element");
+        const item = `<li>${msg}</li>`;
+        messages.insertAdjacentHTML("beforeend", item);
+      });
+
+      form.addEventListener("submit", (e) => {
+        console.log("entre submit", input.value);
+        e.preventDefault();
+        if (input.value) {
+          socket.emit("chat message", input.value);
+          input.value = "";
+        }
+      });
+    </script>
+    <!-- <style type="text/css">
+      body {
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      #chat {
+        border: 1px solid black;
+        height: 100%;
+        width: 300px;
+        position: relative;
+      }
+      #messages {
+        height: 50%;
+        padding: 0;
+        overflow: auto;
+      }
+      #messages > li {
+        list-style: none;
+        font-size: 22px;
+        padding: 10px 5px;
+      }
+      #messages > li:nth-child(odd) {
+        background-color: darkgrey;
+      }
+
+      button {
+        background: blue;
+        color: white;
+      }
+      input {
+        border-radius: 50px;
+        padding: 5px;
+      }
+    </style> -->
+  </head>
+  <body>
+    <h1>Zantica chat</h1>
+    <section id="chat">
+      <ul id="messages"></ul>
+      <form id="form">
+        <input
+          type="text"
+          name="message"
+          id="input"
+          placeholder="Escribe un mensaje"
+          autocomplete="off"
+        />
+        <button type="submit">Enviar</button>
+      </form>
+    </section>
+  </body>
+</html>
