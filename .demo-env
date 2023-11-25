@@ -1,0 +1,2 @@
+PORT= numero de puertos
+DATABASE_URL="dblang://user:password@localhost:dbport/dbname"

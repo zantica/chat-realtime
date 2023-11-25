@@ -7,10 +7,11 @@ import session from "express-session";
 import bcrypt from "bcrypt";
 import { Strategy } from "passport-local";
 import dotenv from "dotenv";
+import { user } from "./services/user/user.js";
 
 dotenv.config();
-const port = process.env.PORT ?? 3000;
 
+const port = process.env.PORT ?? 3000;
 const app = express();
 
 const server = createServer(app);
@@ -78,24 +79,27 @@ app.get("/", (req, res) => {
   res.sendFile(process.cwd() + "/client/index.html");
 });
 
+app.post("/create", (req, res) => {
+  const { username, password, name, email } = req.body;
+  console.log(req.body);
+  const response = user.createUser({ username, password, name, email });
+  res.send(response);
+});
+
 app.get("/login", (req, res) => {
   res.sendFile(process.cwd() + "/client/login.html");
 });
 
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
-console.log(req.body);
-  if (username === "santi" && password === "1234") {
+  console.log(req.body);
+  const userlogged = user.userLogin({ username, password });
+  if (userlogged) {
     res.send(200, "usuario logeado");
   } else {
     res.send(401, "unauthorized");
   }
 });
-
-// app.post("/", (req, res) => {
-//   const { user, password } = req.body;
-//   //TODO CREAR USUARIO
-// });
 
 server.listen(port, () => {
   console.log("server listening on port " + port);
