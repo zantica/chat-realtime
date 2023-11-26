@@ -19,10 +19,8 @@ export const user = {
       if (!username || !password) throw { message: "need credentials" };
       const userToLogin = await prisma.ch_user.findFirst({
         where: {
-          AND: {
-            username,
-            password,
-          },
+          username,
+          password,
         },
         select: {
           username: true,
@@ -30,9 +28,9 @@ export const user = {
           email: true,
         },
       });
-      userToLogin.length && true;
+      return userToLogin;
     } catch (error) {
-      console.log(error);
+      console.log("error", error);
     }
   },
 };
